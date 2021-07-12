@@ -74,7 +74,6 @@ class ViewViz extends FBP(LitElement) {
       <viz-nav
         @-arrow-right="--arrowRight"
         @-arrow-left="--arrowLeft"
-        ƒ-xxxx="|--xxxx"
         @-delete-current="--deleteCurrentViz"
         @-clipboard-requested="--clipboardContentRequested"
       ></viz-nav>

@@ -277,7 +277,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
           .move(node.x - node.width / 2, node.y - node.height / 2)
           .fill('orange');
         if(node.wirename.startsWith("|--")){
-          circle.fill('magenta')
+          circle.fill('green')
         }
         // send tooltip event
         circle.mouseover(() => {
