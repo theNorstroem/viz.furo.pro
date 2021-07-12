@@ -74,6 +74,7 @@ class ViewViz extends FBP(LitElement) {
       <viz-nav
         @-arrow-right="--arrowRight"
         @-arrow-left="--arrowLeft"
+        ƒ-xxxx="|--xxxx"
         @-delete-current="--deleteCurrentViz"
         @-clipboard-requested="--clipboardContentRequested"
       ></viz-nav>
@@ -92,7 +93,7 @@ class ViewViz extends FBP(LitElement) {
         id="flow"
         ƒ-request-fullscreen="--keyF"
         ƒ-parse-html="--stackChanged"
-        @-component-clicked="--componentClicked"
+        @-component-dblclick="--componentDblClicked"
       ></furo-show-flow>
 
       <!-- read the content from clipboard -->
@@ -107,7 +108,7 @@ class ViewViz extends FBP(LitElement) {
       <!-- receive content from opener -->
       <remote-message
         @-content="--clipboardContent"
-        ƒ-request-component="--componentClicked"
+        ƒ-request-component="--componentDblClicked"
       ></remote-message>
     `;
   }

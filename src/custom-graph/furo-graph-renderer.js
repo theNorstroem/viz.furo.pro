@@ -68,11 +68,11 @@ class FuroGraphRenderer extends FBP(LitElement) {
 
         box.dblclick(() => {
           /**
-           * @event component-clicked
+           * @event component-dblclick
            * Fired when a component was clicked
            * detail payload: the complete node
            */
-          const customEvent = new Event('component-clicked', { composed: true, bubbles: true });
+          const customEvent = new Event('component-dblclick', { composed: true, bubbles: true });
           customEvent.detail = node;
           this.dispatchEvent(customEvent);
         });
@@ -97,17 +97,10 @@ class FuroGraphRenderer extends FBP(LitElement) {
             timout = setTimeout(() => {
               const elem = {
                 duration: 5000,
-                cr: {
-                  top: e.clientY - 10,
-                  bottom: e.clientY + 10,
-                  x: e.clientX,
-                  y: e.clientY,
-                  left: e.clientX - 10,
-                  width: 20,
-                  height: 20,
-                },
+                cr: line.node.getBoundingClientRect(),
                 label: edge.wirename,
               };
+
               /**
                * @event show-tooltip-requested
                * Fired on mouseover of a attr node
@@ -116,6 +109,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
                 composed: true,
                 bubbles: true,
               });
+
               customEvent.detail = elem;
               this.dispatchEvent(customEvent);
             }, 60);
@@ -185,7 +179,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
         if (node.attr._type === 'method') {
           box = canvas
             .rect(10, node.height)
-            .move(node.x - node.width / 2, node.y - node.height / 2);
+            .move(node.x + node.width / 2 - 10, node.y - node.height / 2);
           box.radius(3);
           box.addClass('methodindicator');
         }
@@ -275,10 +269,16 @@ class FuroGraphRenderer extends FBP(LitElement) {
         });
       }
       if (node.type === 'nosource') {
+        // TriggerWire
+
+
         const circle = canvas
           .circle(node.width, node.height)
           .move(node.x - node.width / 2, node.y - node.height / 2)
           .fill('orange');
+        if(node.wirename.startsWith("|--")){
+          circle.fill('magenta')
+        }
         // send tooltip event
         circle.mouseover(() => {
           const elem = {

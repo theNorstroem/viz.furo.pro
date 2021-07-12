@@ -30,7 +30,9 @@ class RemoteMessage extends FBP(LitElement) {
     });
 
     this.updateComplete.then(() => {
-      window.opener.postMessage({ type: 'analyzer-ready' }, '*');
+      if(window.opener){
+        window.opener.postMessage({ type: 'analyzer-ready' }, '*');
+      }
     });
   }
 
