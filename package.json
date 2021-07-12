@@ -17,7 +17,7 @@
     "format": "npm run format:eslint && npm run format:prettier",
     "lint": "npm run lint:eslint  && npm run lint:prettier",
     "test": "karma start --coverage",
-    "build": "rimraf dist && rollup -c rollup.config.js",
+    "build": "rimraf dist && rollup -c rollup.config.js && cp CNAME dist/CNAME",
     "test:watch": "karma start --auto-watch=true --single-run=false",
     "lint:eslint-fix": "eslint --fix \"src/**/*.js\" --ignore-path .gitignore",
     "format:eslint": "eslint \"src/**/*.js\" --fix --ignore-path .gitignore",
