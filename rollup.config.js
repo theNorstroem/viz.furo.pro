@@ -13,7 +13,7 @@ import copy from 'rollup-plugin-copy';
 
 const baseConfig = createSpaConfig({
   // use the outputdir option to modify where files are output
-  // outputDir: 'dist',
+  outputDir: 'docs',
 
   // if you need to support older browsers, such as IE11, set the legacyBuild
   // option to generate an additional build just for this browser
@@ -32,9 +32,11 @@ const copyConf = merge(baseConfig, {
   plugins: [
     copy({
       targets: [
-        { src: 'assets/**/*', dest: 'dist/assets' },
-        { src: 'manifest.webmanifest', dest: 'dist' },
-        { src: 'robots.txt', dest: 'dist' },
+        { src: 'assets/**/*', dest: 'docs/assets' },
+        { src: 'src/configs/flowConfig.json', dest: 'docs/src' },
+        { src: 'manifest.json', dest: 'docs' },
+        { src: 'favicon.ico', dest: 'docs' },
+        { src: 'robots.txt', dest: 'docs' },
       ],
       // set flatten to false to preserve folder structure
       flatten: false,

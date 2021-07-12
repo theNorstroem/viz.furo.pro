@@ -13,11 +13,11 @@
   "main": "app-shell.js",
   "scripts": {
     "start": "es-dev-server --open",
-    "start:build": "npm run build && es-dev-server --root-dir dist --config es-dev-server-build.config.js --app-index index.html --compatibility none",
+    "start:build": "es-dev-server --root-dir docs --config es-dev-server-build.config.js --app-index index.html --compatibility none",
     "format": "npm run format:eslint && npm run format:prettier",
     "lint": "npm run lint:eslint  && npm run lint:prettier",
     "test": "karma start --coverage",
-    "build": "rimraf dist && rollup -c rollup.config.js && cp CNAME dist/CNAME && mv dist docs",
+    "build": "rimraf docs && rollup -c rollup.config.js && cp CNAME docs/CNAME",
     "test:watch": "karma start --auto-watch=true --single-run=false",
     "lint:eslint-fix": "eslint --fix \"src/**/*.js\" --ignore-path .gitignore",
     "format:eslint": "eslint \"src/**/*.js\" --fix --ignore-path .gitignore",
