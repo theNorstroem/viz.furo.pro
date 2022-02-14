@@ -248,6 +248,17 @@ class FuroShowFlow extends FBP(LitElement) {
               // eslint-disable-next-line no-param-reassign
               attr._type = 'method';
             }
+            // collect the method wires
+            if (attr.name.startsWith('fn-')) {
+              this._collectedWires.methods.push(attr);
+              // eslint-disable-next-line no-param-reassign
+              attr._type = 'method';
+            }// collect the method wires
+            if (attr.name.startsWith('set-')) {
+              this._collectedWires.methods.push(attr);
+              // eslint-disable-next-line no-param-reassign
+              attr._type = 'method';
+            }
           });
           this._recursiveParse(e, nodeID);
         }

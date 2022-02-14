@@ -36,11 +36,12 @@ class FuroGraphRenderer extends FBP(LitElement) {
       // boxes for the components
       if (node.type === 'component') {
         const box = canvas
-          .rect(node.width, node.height)
+          .rect( node.width, node.height)
           .move(node.x - node.width / 2, node.y - node.height / 2)
           .fill('none');
-        box.radius(5);
+        box.radius(10);
         box.addClass(node.type);
+
 
         // set tooltip if exist
         if (node.node.description !== '') {
