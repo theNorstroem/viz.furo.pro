@@ -232,7 +232,7 @@ class FuroShowFlow extends FBP(LitElement) {
             this.graph.setParent(`${nodeID}-center`, nodeID);
 
             // collect the event wires
-            if (attr.name.startsWith('@-')) {
+            if (attr.name.startsWith('@-') || attr.name.startsWith('at-')) {
               this._collectedWires.events.push(attr);
               // eslint-disable-next-line no-param-reassign
               attr._type = 'event';
