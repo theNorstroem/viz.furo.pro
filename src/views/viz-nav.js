@@ -33,13 +33,12 @@ class VizNav extends FBP(LitElement) {
         }
 
         .nav {
-          min-width: 35px;
+          min-width: 30px;
           padding: 0;
         }
         .title{
           background: white;
           box-sizing: border-box;
-
         }
       `
     );
