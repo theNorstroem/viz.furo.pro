@@ -7,10 +7,7 @@ import './views/man-page.js';
 import '@furo/layout/src/furo-vertical-flex';
 import '@furo/route/src/furo-location';
 import '@furo/route/src/furo-pages';
-import '@furo/route/src/furo-app-flow';
-import '@furo/fbp/src/flow-bind';
 
-import '@furo/notification/src/furo-snackbar-display.js';
 
 /**
  * `main-stage`
