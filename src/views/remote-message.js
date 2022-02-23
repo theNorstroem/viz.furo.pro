@@ -24,7 +24,7 @@ class RemoteMessage extends FBP(LitElement) {
          * detail payload: html
          */
         const customEvent = new Event('content', { composed: true, bubbles: true });
-        customEvent.detail = event.data.data;
+        customEvent.detail = event.data;
         this.dispatchEvent(customEvent);
       }
     });

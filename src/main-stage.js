@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit-element';
 import { FBP } from '@furo/fbp';
-import { Theme } from '@furo/framework/src/theme';
-import { Styling } from './configs/styling.js';
+
 
 import './views/view-viz.js';
 import './views/man-page.js';
@@ -30,10 +29,9 @@ class MainStage extends FBP(LitElement) {
    * @return {CSSResult}
    */
   static get styles() {
-    const theme = Theme.getThemeForComponent('MainStage');
-    if (theme) {
-      return [theme, Styling.theme];
-    }
+
+
+
     // language=CSS
     return [
       css`
@@ -53,7 +51,7 @@ class MainStage extends FBP(LitElement) {
           height: 100%;
         }
       `,
-      Styling.theme,
+
     ];
   }
 

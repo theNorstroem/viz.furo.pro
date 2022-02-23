@@ -90,7 +90,7 @@ class ManPage extends FBP(LitElement) {
       <p>
         If you are familiar with fbp, you should not have any problem to read the graph. Otherwise
         we recommend to read
-        <a target="_blank" rel="noreferrer" href="https://furo.pro/guide/md/fbp-wires/"
+        <a target="_blank" rel="noreferrer" href="https://fbp.furo.pro/"
           >the guide</a
         >
         to learn more about
@@ -155,7 +155,7 @@ class ManPage extends FBP(LitElement) {
       <p><strong>paning</strong> (with 2 fingers) pans the flow.</p>
 
       <a class="close" href="/">
-        <furo-button outline>close help</furo-button>
+        <button>close help</button>
       </a>
     `;
   }
