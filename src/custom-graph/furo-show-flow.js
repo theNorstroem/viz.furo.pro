@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-import { Theme } from '@furo/framework/src/theme';
 import { FBP } from '@furo/fbp';
 import 'dagre/dist/dagre.min';
 import './furo-graph-renderer.js';
@@ -274,7 +273,6 @@ class FuroShowFlow extends FBP(LitElement) {
   static get styles() {
     // language=CSS
     return (
-      Theme.getThemeForComponent('FuroShowFlow') ||
       css`
         :host {
           display: block;

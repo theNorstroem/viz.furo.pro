@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit-element';
-import { Theme } from '@furo/framework/src/theme';
 import { FBP } from '@furo/fbp';
 import '@furo/fbp/src/flow-repeat';
 
@@ -46,7 +45,6 @@ class ViewViz extends FBP(LitElement) {
   static get styles() {
     // language=CSS
     return (
-      Theme.getThemeForComponent('ViewViz') ||
       css`
         :host {
           display: block;

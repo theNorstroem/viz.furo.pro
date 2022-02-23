@@ -1,5 +1,4 @@
 import { LitElement, css } from 'lit-element';
-import { Theme } from '@furo/framework/src/theme.js';
 import { FBP } from '@furo/fbp';
 
 /**
@@ -51,7 +50,6 @@ class RemoteMessage extends FBP(LitElement) {
   static get styles() {
     // language=CSS
     return (
-      Theme.getThemeForComponent('RemoteMessage') ||
       css`
         :host {
           display: none;
