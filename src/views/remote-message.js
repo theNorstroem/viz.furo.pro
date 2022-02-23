@@ -1,4 +1,4 @@
-import { LitElement, css } from 'lit-element';
+import { LitElement, css } from 'lit';
 import { FBP } from '@furo/fbp';
 
 /**
@@ -26,6 +26,8 @@ class RemoteMessage extends FBP(LitElement) {
         customEvent.detail = event.data;
         this.dispatchEvent(customEvent);
       }
+
+
     });
 
     this.updateComplete.then(() => {
@@ -33,6 +35,22 @@ class RemoteMessage extends FBP(LitElement) {
         window.opener.postMessage({ type: 'analyzer-ready' }, '*');
       }
     });
+  }
+
+  /**
+   * this is needed to set the breakpoint
+   * @param conponent
+   */
+  setCurrentComponent(conponent){
+    this.currentComponent = conponent
+  }
+
+  addBreakpoint(data){
+    window.opener.postMessage({ type: 'add-breakpoint', component: this.currentComponent, wire: data.edge.wirename }, '*');
+  }
+
+  removeBreakpoint(data){
+    window.opener.postMessage({ type: 'remove-breakpoint', component: this.currentComponent, wire: data.edge.wirename }, '*');
   }
 
   // eslint-disable-next-line class-methods-use-this

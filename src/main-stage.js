@@ -1,6 +1,5 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import { FBP } from '@furo/fbp';
-
 
 import './views/view-viz.js';
 import './views/man-page.js';

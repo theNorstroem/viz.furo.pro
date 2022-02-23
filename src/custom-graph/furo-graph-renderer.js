@@ -1,4 +1,4 @@
-import { LitElement, css } from 'lit-element';
+import { LitElement, css } from 'lit';
 import { FBP } from '@furo/fbp';
 import { SVG } from '@svgdotjs/svg.js';
 import '@svgdotjs/svg.panzoom.js/dist/svg.panzoom.esm.js';
@@ -91,8 +91,37 @@ class FuroGraphRenderer extends FBP(LitElement) {
         // debounce tooltip on lines
         let timout;
         let toRegistred = false;
+        line.click(( )=>{
+          if(line.hasClass("breakpoint")){
+            /**
+             * @event add-breakpoint
+             * Fired when a breakpoint must be added
+             */
+            const customEvent = new Event('remove-breakpoint-requested', {composed:true, bubbles: true});
+            customEvent.detail = {line, edge};
+            this.dispatchEvent(customEvent)
+            line.removeClass("breakpoint")
+          }else{
+            /**
+             * @event add-breakpoint
+             * Fired when a breakpoint must be added
+             */
+            const customEvent = new Event('add-breakpoint-requested', {composed:true, bubbles: true});
+            customEvent.detail = {line, edge};
+            this.dispatchEvent(customEvent)
+            line.addClass("breakpoint")
+          }
+
+
+
+
+
+        });
+
         line.mouseover(() => {
           if (!toRegistred) {
+
+
             toRegistred = true;
             timout = setTimeout(() => {
               const elem = {
@@ -512,7 +541,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
         .line {
           stroke: #02a8f4;
           fill: none;
-          stroke-width: 4;
+          stroke-width: 5;
         }
 
         .line.park {
@@ -523,7 +552,19 @@ class FuroGraphRenderer extends FBP(LitElement) {
 
         .line:hover {
           stroke: #f4c633;
+          cursor: copy;
         }
+
+
+
+        .line.breakpoint {
+          stroke: #c6191e;
+
+          cursor: no-drop;
+        }
+
+
+
       `
     );
   }

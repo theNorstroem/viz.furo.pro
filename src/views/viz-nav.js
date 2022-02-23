@@ -1,5 +1,5 @@
 /* eslint-disable lit-a11y/no-autofocus */
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import { FBP } from '@furo/fbp';
 import '@furo/layout';
 

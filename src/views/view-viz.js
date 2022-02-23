@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element';
+import { LitElement, html, css } from 'lit';
 import { FBP } from '@furo/fbp';
 import '@furo/fbp/src/flow-repeat';
 
@@ -6,7 +6,7 @@ import '@furo/fbp/src/flow-repeat';
 import '@furo/util/src/furo-get-clipboard';
 import '@furo/util/src/furo-key-filter';
 import '@furo/util/src/furo-keydown';
-import '@furo/logic/src/furo-forth-stack';
+import '@furo/util/src/furo-forth-stack';
 import './viz-nav.js';
 import './remote-message.js';
 import '../custom-graph/furo-show-flow.js';
@@ -101,6 +101,8 @@ class ViewViz extends FBP(LitElement) {
         ƒ-request-fullscreen="--keyF"
         ƒ-parse-html="--stackChanged(*.data)"
         @-component-dblclick="--componentDblClicked"
+        @-add-breakpoint-requested="--breakpoint"
+        @-remove-breakpoint-requested="--breakpointRemover"
       ></furo-show-flow>
 
       <!-- read the content from clipboard -->
@@ -116,6 +118,9 @@ class ViewViz extends FBP(LitElement) {
       <remote-message
         @-content="--remoteContent"
         ƒ-request-component="--componentDblClicked"
+        ƒ-add-breakpoint="--breakpoint"
+        ƒ-remove-breakpoint="--breakpointRemover"
+        ƒ-set-current-component="--stackChanged(*.component)"
       ></remote-message>
     `;
   }
