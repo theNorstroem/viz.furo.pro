@@ -208,7 +208,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
         if (node.attr._type === 'method') {
           box = canvas
             .rect(10, node.height)
-            .move(node.x + node.width / 2 - 10, node.y - node.height / 2);
+            .move(node.x - node.width / 2 , node.y - node.height / 2);
           box.radius(3);
           box.addClass('methodindicator');
         }
@@ -227,7 +227,6 @@ class FuroGraphRenderer extends FBP(LitElement) {
         if (!node.attr.value) {
           box.addClass('flag');
           // add black bar to the left
-
           const indicator = canvas
             .rect(10, node.height)
             .move(node.x - node.width / 2, node.y - node.height / 2);
