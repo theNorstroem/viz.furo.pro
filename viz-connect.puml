@@ -1,0 +1,36 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+ autonumber
+
+Client -> Viz: Open https://viz.furo.pro
+Viz -> Client: Message: analyzer-ready
+
+Client -> Viz: request the rendering of the root element (default:body)
+
+
+loop Drill Down
+autonumber
+Client <-- Viz: COMPONENT_REQUEST
+Client --> Viz: RENDER_REQUEST
+end
+
+alt Client reload
+autonumber
+Client -> Viz: PARENT REFRESHING
+Client -> Client: Reload and reinit
+Client <-- Viz: PARENT_REFRESHED after a timeout of 2500
+
+Client --> Viz: RESEND_BREAKPOINTS_REQUEST
+Client <-- Viz: BREAKPOINTS
+end
+
+
+alt Adding BREAKPOINTS
+autonumber
+Client <-- Viz: ADD_BREAKPOINT
+Client <-- Viz: REMOVE_BREAKPOINT
+end
+
+
+@enduml

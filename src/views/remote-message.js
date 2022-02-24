@@ -16,7 +16,7 @@ class RemoteMessage extends FBP(LitElement) {
 
     window.addEventListener('message', event => {
       // expect {type:"render-request", data: html}
-      if (event.data.type && event.data.type === 'render-request') {
+      if (event.data.type && event.data.type === 'RENDER_REQUEST') {
         /**
          * @event content
          * Fired when remote content was received
@@ -27,6 +27,16 @@ class RemoteMessage extends FBP(LitElement) {
         this.dispatchEvent(customEvent);
       }
 
+      // reconnecting
+      if (event.data === "PARENT_REFRESHING") { // STEP 1
+        console.log("PARENT_REFRESHING")
+        setTimeout(() => {
+          window.opener.postMessage( // STEP 3
+            { type: "PARENT_REFRESHED", url:window.location.href},
+            '*'
+          );
+        }, 2500);
+      }
 
     });
 
@@ -46,17 +56,17 @@ class RemoteMessage extends FBP(LitElement) {
   }
 
   addBreakpoint(data){
-    window.opener.postMessage({ type: 'add-breakpoint', component: this.currentComponent, wire: data.edge.wirename }, '*');
+    window.opener.postMessage({ type: 'ADD_BREAKPOINT', component: this.currentComponent, wire: data.edge.wirename }, '*');
   }
 
   removeBreakpoint(data){
-    window.opener.postMessage({ type: 'remove-breakpoint', component: this.currentComponent, wire: data.edge.wirename }, '*');
+    window.opener.postMessage({ type: 'REMOVE_BREAKPOINT', component: this.currentComponent, wire: data.edge.wirename }, '*');
   }
 
   // eslint-disable-next-line class-methods-use-this
   requestComponent(node) {
     if (node.label.includes('-') && window.opener) {
-      window.opener.postMessage({ type: 'component-request', component: node.label }, '*');
+      window.opener.postMessage({ type: 'COMPONENT_REQUEST', component: node.label }, '*');
     }
   }
 
