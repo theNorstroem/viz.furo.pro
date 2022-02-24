@@ -42,7 +42,7 @@ class RemoteMessage extends FBP(LitElement) {
 
     this.updateComplete.then(() => {
       if(window.opener){
-        window.opener.postMessage({ type: 'analyzer-ready' }, '*');
+        window.opener.postMessage({ type: 'ANALYZER_READY' }, '*');
       }
     });
   }
