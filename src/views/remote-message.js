@@ -1,5 +1,5 @@
-import { LitElement, css } from 'lit';
-import { FBP } from '@furo/fbp';
+import {LitElement, css} from 'lit';
+import {FBP} from '@furo/fbp';
 
 /**
  * `remote-content`
@@ -11,6 +11,15 @@ import { FBP } from '@furo/fbp';
  * @appliesMixin FBP
  */
 class RemoteMessage extends FBP(LitElement) {
+
+  constructor() {
+    super();
+
+    // store the breakpoints
+    this._breakpoints = {};
+  }
+
+
   _FBPReady() {
     super._FBPReady();
 
@@ -22,7 +31,7 @@ class RemoteMessage extends FBP(LitElement) {
          * Fired when remote content was received
          * detail payload: html
          */
-        const customEvent = new Event('content', { composed: true, bubbles: true });
+        const customEvent = new Event('content', {composed: true, bubbles: true});
         customEvent.detail = event.data;
         this.dispatchEvent(customEvent);
       }
@@ -32,17 +41,17 @@ class RemoteMessage extends FBP(LitElement) {
         console.log("PARENT_REFRESHING")
         setTimeout(() => {
           window.opener.postMessage( // STEP 3
-            { type: "PARENT_REFRESHED", url:window.location.href},
+            {type: "PARENT_REFRESHED", url: window.location.href, breakpoints: this._breakpoints},
             '*'
           );
-        }, 2500);
+        }, 5500);
       }
 
     });
 
     this.updateComplete.then(() => {
-      if(window.opener){
-        window.opener.postMessage({ type: 'ANALYZER_READY' }, '*');
+      if (window.opener) {
+        window.opener.postMessage({type: 'ANALYZER_READY'}, '*');
       }
     });
   }
@@ -51,22 +60,62 @@ class RemoteMessage extends FBP(LitElement) {
    * this is needed to set the breakpoint
    * @param conponent
    */
-  setCurrentComponent(conponent){
+  setCurrentComponent(conponent) {
     this.currentComponent = conponent
   }
 
-  addBreakpoint(data){
-    window.opener.postMessage({ type: 'ADD_BREAKPOINT', component: this.currentComponent, wire: data.edge.wirename }, '*');
+  addBreakpoint(data) {
+
+    if (window.opener) {
+      window.opener.postMessage({
+        type: 'ADD_BREAKPOINT',
+        component: this.currentComponent,
+        wire: data.edge.wirename
+      }, '*');
+
+      if(this._breakpoints[this.currentComponent]){
+        this._breakpoints[this.currentComponent].wires.push(data.edge.wirename);
+      }else{
+        this._breakpoints[this.currentComponent] = {wires:[data.edge.wirename]};
+      }
+
+      this._notifyBPChanges()
+    }
   }
 
-  removeBreakpoint(data){
-    window.opener.postMessage({ type: 'REMOVE_BREAKPOINT', component: this.currentComponent, wire: data.edge.wirename }, '*');
+  removeBreakpoint(data) {
+    if (window.opener) {
+      window.opener.postMessage({
+        type: 'REMOVE_BREAKPOINT',
+        component: this.currentComponent,
+        wire: data.edge.wirename
+      }, '*');
+
+      if(this._breakpoints[this.currentComponent]){
+        this._breakpoints[this.currentComponent].wires = this._breakpoints[this.currentComponent].wires.filter(wire=>{
+          return wire !== data.edge.wirename
+        })
+      }
+
+      this._notifyBPChanges()
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
   requestComponent(node) {
     if (node.label.includes('-') && window.opener) {
-      window.opener.postMessage({ type: 'COMPONENT_REQUEST', component: node.label }, '*');
+      window.opener.postMessage({type: 'COMPONENT_REQUEST', component: node.label}, '*');
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  requestComponentByName(component) {
+    if (  window.opener) {
+      window.opener.postMessage({type: 'COMPONENT_REQUEST', component}, '*');
+      setTimeout(()=>{
+        this._notifyBPChanges()
+      },100)
+
     }
   }
 
@@ -84,6 +133,26 @@ class RemoteMessage extends FBP(LitElement) {
         }
       `
     );
+  }
+
+  _notifyBPChanges() {
+    /**
+     * @event cc-breakpoints-changed
+     * Fired when breakpoints changed
+     * detail payload:
+     */
+    const bp = new Event('breakpoints-changed', {composed:true, bubbles: true});
+    bp.detail = this._breakpoints;
+    this.dispatchEvent(bp)
+
+    /**
+     * @event cc-breakpoints-changed
+     * Fired when breakpoints changed
+     * detail payload:
+     */
+    const customEvent = new Event('cc-breakpoints-changed', {composed:true, bubbles: true});
+    customEvent.detail = this._breakpoints[this.currentComponent];
+    this.dispatchEvent(customEvent)
   }
 }
 

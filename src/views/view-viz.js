@@ -9,6 +9,7 @@ import '@furo/util/src/furo-keydown';
 import '@furo/util/src/furo-forth-stack';
 import './viz-nav.js';
 import './remote-message.js';
+import './breakpoint-list.js';
 import '../custom-graph/furo-show-flow.js';
 
 /**
@@ -56,7 +57,7 @@ class ViewViz extends FBP(LitElement) {
 
         furo-show-flow {
           height: 100vh;
-          background: var(--surface);
+
         }
 
         viz-nav {
@@ -64,6 +65,11 @@ class ViewViz extends FBP(LitElement) {
           left: 24px;
           top: 16px;
           right: 24px;
+        }
+        breakpoint-list{
+          position: absolute;
+          left: 24px;
+          bottom: 16px;
         }
       `
     );
@@ -86,6 +92,8 @@ class ViewViz extends FBP(LitElement) {
         @-clipboard-requested="--clipboardContentRequested"
       ></viz-nav>
 
+      <breakpoint-list ƒ-set-list="--breakPoints" @-component-requested="--componentName"></breakpoint-list>
+
       <!-- Even the stack was built for mathematical operation, we use the stack as storage for clipboard contents -->
       <furo-forth-stack
         ƒ-put="|--wrappedClipboardContent, --remoteContent"
@@ -103,6 +111,7 @@ class ViewViz extends FBP(LitElement) {
         @-component-dblclick="--componentDblClicked"
         @-add-breakpoint-requested="--breakpoint"
         @-remove-breakpoint-requested="--breakpointRemover"
+        ƒ-update-breakpoints="--currentComponentBreakpoints"
       ></furo-show-flow>
 
       <!-- read the content from clipboard -->
@@ -117,6 +126,9 @@ class ViewViz extends FBP(LitElement) {
       <!-- receive content from opener -->
       <remote-message
         @-content="--remoteContent"
+        @-breakpoints-changed="--breakPoints"
+        @-cc-breakpoints-changed="--currentComponentBreakpoints"
+        ƒ-request-component-by-name="--componentName"
         ƒ-request-component="--componentDblClicked"
         ƒ-add-breakpoint="--breakpoint"
         ƒ-remove-breakpoint="--breakpointRemover"

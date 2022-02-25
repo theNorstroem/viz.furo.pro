@@ -287,12 +287,22 @@ class FuroShowFlow extends FBP(LitElement) {
   }
 
   /**
+  * updateBreakpoints
+  * @public
+  * @param bp
+  */
+  updateBreakpoints(bp) {
+      this._FBPTriggerWire('|--updateBreakpoints', bp);
+  }
+
+
+  /**
    * @private
    * @returns {TemplateResult}
    */
   render() {
     // language=HTML
-    return html` <furo-graph-renderer ƒ-draw="--graph"></furo-graph-renderer> `;
+    return html` <furo-graph-renderer ƒ-update-breakpoints="|--updateBreakpoints" ƒ-draw="--graph"></furo-graph-renderer> `;
   }
 }
 

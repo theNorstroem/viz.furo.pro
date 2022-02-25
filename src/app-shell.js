@@ -4,6 +4,7 @@ import { FBP } from '@furo/fbp';
 import './main-stage.js';
 
 import './components/furo-tooltip-display.js';
+import '@furo/fbp/src/vizConnector.js';
 
 /**
  * `main-app`

@@ -12,6 +12,15 @@ import '@svgdotjs/svg.panzoom.js/dist/svg.panzoom.esm.js';
  * @appliesMixin FBP
  */
 class FuroGraphRenderer extends FBP(LitElement) {
+
+  constructor() {
+    super();
+    // collected wires
+    this._wires = {};
+    // enabled breakpoints (list of wire names)
+    this._activeBreakpoints = []
+  }
+
   draw(graph) {
     const sizes = graph.graph();
     const graphWidth = sizes.width;
@@ -91,6 +100,13 @@ class FuroGraphRenderer extends FBP(LitElement) {
         // debounce tooltip on lines
         let timout;
         let toRegistred = false;
+        if(this._wires[edge.wirename]){
+          this._wires[edge.wirename].push(line);
+        }else {
+          this._wires[edge.wirename] = [line];
+        }
+
+
         line.click(( )=>{
           if(line.hasClass("breakpoint")){
             /**
@@ -100,7 +116,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
             const customEvent = new Event('remove-breakpoint-requested', {composed:true, bubbles: true});
             customEvent.detail = {line, edge};
             this.dispatchEvent(customEvent)
-            line.removeClass("breakpoint")
+
           }else{
             /**
              * @event add-breakpoint
@@ -109,18 +125,11 @@ class FuroGraphRenderer extends FBP(LitElement) {
             const customEvent = new Event('add-breakpoint-requested', {composed:true, bubbles: true});
             customEvent.detail = {line, edge};
             this.dispatchEvent(customEvent)
-            line.addClass("breakpoint")
           }
-
-
-
-
-
         });
 
         line.mouseover(() => {
           if (!toRegistred) {
-
 
             toRegistred = true;
             timout = setTimeout(() => {
@@ -432,7 +441,34 @@ class FuroGraphRenderer extends FBP(LitElement) {
         });
       }
     });
+
+    this._checkBreakPoints();
   }
+
+  updateBreakpoints(bp) {
+    this._activeBreakpoints = bp.wires;
+    this._checkBreakPoints();
+
+  }
+
+  _checkBreakPoints(){
+
+    Object.keys(this._wires).forEach(wire=>{
+      this._wires[wire].forEach(line =>{
+        line.removeClass("breakpoint")
+      })
+    })
+
+
+    this._activeBreakpoints.forEach(wire=>{
+    this._wires[wire].forEach(line =>{
+        line.addClass("breakpoint")
+      })
+    })
+
+
+  }
+
 
   /**
    * flow is ready lifecycle method
