@@ -26,7 +26,7 @@ class ViewViz extends FBP(LitElement) {
   _FBPReady() {
     super._FBPReady();
     // describe view-viz itself
-    this._FBPTriggerWire('--stackChanged', {data:this.shadowRoot.innerHTML, component:"view-viz"});
+    this._FBPTriggerWire('--remoteContent', {data:this.shadowRoot.innerHTML, component:"view-viz"});
 
     /**
      * Register hook on wire |--clipboardContent to
@@ -85,29 +85,21 @@ class ViewViz extends FBP(LitElement) {
     return html`
       <!-- The navigation bar on top of the screen -->
       <viz-nav
-        ƒ-set-title="--stackChanged(*.component)"
-        @-arrow-right="--arrowRight"
-        @-arrow-left="--arrowLeft"
-        @-delete-current="--deleteCurrentViz"
+        ƒ-set-title="--remoteContent(*.path)"
         @-clipboard-requested="--clipboardContentRequested"
+        @-escape="--zoomOutClicked"
       ></viz-nav>
 
-      <breakpoint-list ƒ-set-list="--breakPoints" @-component-requested="--componentName"></breakpoint-list>
+      <breakpoint-list ƒ-set-list="--breakPoints" @-component-requested="--componentPath"></breakpoint-list>
 
-      <!-- Even the stack was built for mathematical operation, we use the stack as storage for clipboard contents -->
-      <furo-forth-stack
-        ƒ-put="|--wrappedClipboardContent, --remoteContent"
-        ƒ-rot="--arrowLeft"
-        ƒ-rrot="--arrowRight"
-        ƒ-drop="--deleteCurrentViz"
-        @-stack-changed="--stackChanged"
-      ></furo-forth-stack>
+
+
 
       <!-- This component shows the graphed flow of the injected content. -->
       <furo-show-flow
         id="flow"
         ƒ-request-fullscreen="--keyF"
-        ƒ-parse-html="--stackChanged(*.data)"
+        ƒ-parse-html="|--wrappedClipboardContent(*.data), --remoteContent(*.data)"
         @-component-dblclick="--componentDblClicked"
         @-add-breakpoint-requested="--breakpoint"
         @-remove-breakpoint-requested="--breakpointRemover"
@@ -128,11 +120,11 @@ class ViewViz extends FBP(LitElement) {
         @-content="--remoteContent"
         @-breakpoints-changed="--breakPoints"
         @-cc-breakpoints-changed="--currentComponentBreakpoints"
-        ƒ-request-component-by-name="--componentName"
+        ƒ-request-component-by-path="--componentPath"
         ƒ-request-component="--componentDblClicked"
+        ƒ-request-parent-component="--zoomOutClicked"
         ƒ-add-breakpoint="--breakpoint"
         ƒ-remove-breakpoint="--breakpointRemover"
-        ƒ-set-current-component="--stackChanged(*.component)"
       ></remote-message>
     `;
   }

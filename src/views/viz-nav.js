@@ -57,10 +57,7 @@ class VizNav extends FBP(LitElement) {
     return html`
       <furo-horizontal-flex space>
         <!-- This is the button, you see on the top left corner of the app. Everything starts with pressing this button (as long you have some content in your clipboard) -->
-        <button class="nav"  @-click="-^arrow-left">◀</button>
-        <button class="nav"  @-click="-^arrow-right">▶</button>
-        <button class="nav"  @-click="-^delete-current">✘</button>
-
+        <button class="nav"  @-click="-^escape">✘</button>
         <div class="title"> ${this.componentTitle}</div>
         <furo-empty-spacer></furo-empty-spacer>
         <!-- The help button ot the top right side just links to /man. Thats all. -->

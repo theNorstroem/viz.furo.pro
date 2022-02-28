@@ -1,6 +1,6 @@
-import { LitElement, css } from 'lit';
-import { FBP } from '@furo/fbp';
-import { SVG } from '@svgdotjs/svg.js';
+import {LitElement, css} from 'lit';
+import {FBP} from '@furo/fbp';
+import {SVG} from '@svgdotjs/svg.js';
 import '@svgdotjs/svg.panzoom.js/dist/svg.panzoom.esm.js';
 
 /**
@@ -33,7 +33,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
     }
     const canvas = SVG()
       .addTo(this.shadowRoot)
-      .panZoom({ zoomMin: 0.1, zoomMax: 10, zoomFactor: 0.115 });
+      .panZoom({zoomMin: 0.1, zoomMax: 10, zoomFactor: 0.115});
 
     canvas.viewbox(0, 0, graphWidth, graphHeight);
     this.canvas = canvas;
@@ -44,7 +44,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
       // boxes for the components
       if (node.type === 'component') {
         const box = canvas
-          .rect( node.width, node.height)
+          .rect(node.width, node.height)
           .move(node.x - node.width / 2, node.y - node.height / 2)
           .fill('none');
         box.radius(10);
@@ -81,7 +81,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
            * Fired when a component was clicked
            * detail payload: the complete node
            */
-          const customEvent = new Event('component-dblclick', { composed: true, bubbles: true });
+          const customEvent = new Event('component-dblclick', {composed: true, bubbles: true});
           customEvent.detail = node;
           this.dispatchEvent(customEvent);
         });
@@ -100,29 +100,29 @@ class FuroGraphRenderer extends FBP(LitElement) {
         // debounce tooltip on lines
         let timout;
         let toRegistred = false;
-        if(this._wires[edge.wirename]){
+        if (this._wires[edge.wirename]) {
           this._wires[edge.wirename].push(line);
-        }else {
+        } else {
           this._wires[edge.wirename] = [line];
         }
 
 
-        line.click(( )=>{
-          if(line.hasClass("breakpoint")){
+        line.click(() => {
+          if (line.hasClass("breakpoint")) {
             /**
              * @event add-breakpoint
              * Fired when a breakpoint must be added
              */
-            const customEvent = new Event('remove-breakpoint-requested', {composed:true, bubbles: true});
+            const customEvent = new Event('remove-breakpoint-requested', {composed: true, bubbles: true});
             customEvent.detail = {line, edge};
             this.dispatchEvent(customEvent)
 
-          }else{
+          } else {
             /**
              * @event add-breakpoint
              * Fired when a breakpoint must be added
              */
-            const customEvent = new Event('add-breakpoint-requested', {composed:true, bubbles: true});
+            const customEvent = new Event('add-breakpoint-requested', {composed: true, bubbles: true});
             customEvent.detail = {line, edge};
             this.dispatchEvent(customEvent)
           }
@@ -217,7 +217,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
         if (node.attr._type === 'method') {
           box = canvas
             .rect(10, node.height)
-            .move(node.x - node.width / 2 , node.y - node.height / 2);
+            .move(node.x - node.width / 2, node.y - node.height / 2);
           box.radius(3);
           box.addClass('methodindicator');
         }
@@ -290,7 +290,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
           .move(node.x - node.width / 2, node.y - node.height / 2)
           .fill('red');
 
-        if(node.wirename.startsWith("|--")){
+        if (node.wirename.startsWith("|--")) {
           circle.fill('green')
         }
 
@@ -317,7 +317,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
           .circle(node.width, node.height)
           .move(node.x - node.width / 2, node.y - node.height / 2)
           .fill('orange');
-        if(node.wirename.startsWith("|--")){
+        if (node.wirename.startsWith("|--")) {
           circle.fill('green')
         }
         // send tooltip event
@@ -431,7 +431,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
         }
         // send tooltip event
         box.mouseover(() => {
-          const elem = { duration: 5000, cr: box.node.getBoundingClientRect(), label: node.label };
+          const elem = {duration: 5000, cr: box.node.getBoundingClientRect(), label: node.label};
           const customEvent = new Event('show-tooltip-requested', {
             composed: true,
             bubbles: true,
@@ -446,24 +446,26 @@ class FuroGraphRenderer extends FBP(LitElement) {
   }
 
   updateBreakpoints(bp) {
-    this._activeBreakpoints = bp.wires;
+    this._activeBreakpoints = bp;
     this._checkBreakPoints();
 
   }
 
-  _checkBreakPoints(){
+  _checkBreakPoints() {
 
-    Object.keys(this._wires).forEach(wire=>{
-      this._wires[wire].forEach(line =>{
+    Object.keys(this._wires).forEach(wire => {
+      this._wires[wire].forEach(line => {
         line.removeClass("breakpoint")
       })
     })
 
 
-    this._activeBreakpoints.forEach(wire=>{
-    this._wires[wire].forEach(line =>{
-        line.addClass("breakpoint")
-      })
+    this._activeBreakpoints.forEach(bp => {
+      if (this._wires[bp.wire]) {
+        this._wires[bp.wire].forEach(line => {
+          line.addClass("breakpoint")
+        })
+      }
     })
 
 
@@ -589,7 +591,6 @@ class FuroGraphRenderer extends FBP(LitElement) {
           stroke: #f4c633;
           cursor: copy;
         }
-
 
 
         .line.breakpoint {

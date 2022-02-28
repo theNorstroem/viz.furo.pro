@@ -3,7 +3,16 @@ import {FBP} from "@furo/fbp";
 
 /**
  * `breakpoint-list-item`
- * todo Describe your element
+ *
+ *  ```
+ *  {
+ *   path: "body > app-shell::shadow > main-stage::shadow > furo-pages > view-echo",
+ *   wire: "--responseEcho",
+ *   kind: "CONDITIONAL",
+ *   condition: "this.getAttribute('name')==='echo-service'",
+ *   enabled: true
+ * }
+ * ```
  *
  * @summary todo shortdescription
  * @customElement
@@ -54,8 +63,9 @@ class BreakpointListItem extends FBP(LitElement) {
   }
 
   inject(d) {
-    this.component = d.component
+    this.path = d.path
     this.wire = d.wire
+    this.kind = d.kind
 
   }
 
@@ -67,7 +77,15 @@ class BreakpointListItem extends FBP(LitElement) {
   render() {
     // language=HTML
     return html`
-      <span @-click="^^component-requested(component)">${this.component} <small>${this.wire}</small></span>
+      <input type="checkbox">
+      <select name="" id="">
+        <option value="BREAKPOINT">BREAKPOINT</option>
+        <option value="TRACE">TRACE</option>
+        <option value="CONDITIONAL">CONDITIONAL</option>
+
+      </select>
+    <span @-click="^^component-requested(path)">${this.path} <small>${this.wire}</small> </span>
+
     `;
   }
 }

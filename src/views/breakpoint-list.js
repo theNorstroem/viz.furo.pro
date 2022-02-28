@@ -4,7 +4,14 @@ import './breakpoint-list-item.js';
 
 /**
  * `breakpoint-list`
- * todo Describe your element
+ * ```
+ * {
+ *   path: "body > app-shell::shadow > main-stage::shadow > furo-pages > view-echo",
+ *   wire: "--responseEcho",
+ *   kind: "CONDITIONAL",
+ *   condition: "this.getAttribute('name')==='echo-service'",
+ *   enabled: true
+ * }
  *
  * @summary todo shortdescription
  * @customElement
@@ -13,18 +20,6 @@ import './breakpoint-list-item.js';
 class BreakpointList extends FBP(LitElement) {
 
 
-  /**
-   * @private
-   * @return {Object}
-   */
-  static get properties() {
-    return {
-      /**
-       * Description
-       */
-      myBool: {type: Boolean}
-    };
-  }
 
   /**
   * setList set breakpoints
@@ -32,13 +27,7 @@ class BreakpointList extends FBP(LitElement) {
   * @param breakpoints
   */
   setList(breakpoints) {
-      const list = []
-      Object.keys(breakpoints).forEach(component => {
-        breakpoints[component].wires.forEach(wire=>{
-          list.push({component, wire})
-        })
-      })
-      this._FBPTriggerWire('|--list', list);
+      this._FBPTriggerWire('|--list', breakpoints);
   }
 
 
