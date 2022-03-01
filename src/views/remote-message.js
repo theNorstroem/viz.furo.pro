@@ -15,26 +15,8 @@ class RemoteMessage extends FBP(LitElement) {
   constructor() {
     super();
 
-    // store the breakpoints
-    this._breakpoints = [{
-      path: "body > app-shell::shadow > main-stage::shadow > furo-pages > view-echo",
-      wire: "--responseEcho",
-      kind: "CONDITIONAL",
-      condition: "data.data.message==='Ping Pong'",
-      enabled: true
-    }, {
-      path: "body > app-shell::shadow > main-stage::shadow > furo-pages > view-echo",
-      wire: "--responseEcho",
-      kind: "CONDITIONAL",
-      condition: "this.getAttribute('name')==='echo-service'",
-      enabled: true
-    }, {
-      path: "body > app-shell::shadow > main-stage",
-      wire: "--locationChanged",
-      kind: "BREAKPOINT",
-      enabled: true
-    }];
-
+    // store for the breakpoints
+    this._breakpoints = [];
 
   }
 
