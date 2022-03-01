@@ -90,15 +90,16 @@ class ViewViz extends FBP(LitElement) {
         @-escape="--zoomOutClicked"
       ></viz-nav>
 
-      <breakpoint-list ƒ-set-list="--breakPoints" @-component-requested="--componentPath"></breakpoint-list>
-
-
+      <breakpoint-list
+        ƒ-set-list="--breakPoints"
+        @-breakpoint-updated="--bpChanges"
+        @-breakpoint-deleted="--bpChanges"
+        @-component-requested="--componentPath"></breakpoint-list>
 
 
       <!-- This component shows the graphed flow of the injected content. -->
       <furo-show-flow
         id="flow"
-        ƒ-request-fullscreen="--keyF"
         ƒ-parse-html="|--wrappedClipboardContent(*.data), --remoteContent(*.data)"
         @-component-dblclick="--componentDblClicked"
         @-add-breakpoint-requested="--breakpoint"
@@ -112,8 +113,7 @@ class ViewViz extends FBP(LitElement) {
         @-content="|--clipboardContent"
       ></furo-get-clipboard>
 
-      <!-- Listen to the f key to turn on fullscreen -->
-      <furo-keydown key="f" @-key="--keyF"></furo-keydown>
+
 
       <!-- receive content from opener -->
       <remote-message
@@ -125,6 +125,7 @@ class ViewViz extends FBP(LitElement) {
         ƒ-request-parent-component="--zoomOutClicked"
         ƒ-add-breakpoint="--breakpoint"
         ƒ-remove-breakpoint="--breakpointRemover"
+        ƒ-notify-bp-changes="--bpChanges"
       ></remote-message>
     `;
   }

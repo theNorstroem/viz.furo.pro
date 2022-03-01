@@ -40,6 +40,31 @@ class BreakpointListItem extends FBP(LitElement) {
   _FBPReady() {
     super._FBPReady();
     // this._FBPTraceWires()
+    /**
+     * Register hook on wire --kindChanged to
+     * handle kind changes
+     */
+    this._FBPAddWireHook("--kindChanged", (e) => {
+       this.breakpoint.kind =  e.composedPath()[0].value;
+      this.kind = this.breakpoint.kind;
+      this.requestUpdate();
+       this._notifyChanges()
+    });
+
+    this._FBPAddWireHook("--enabledChanged", (e) => {
+      this.breakpoint.enabled = e.composedPath()[0].checked;
+      this._notifyChanges()
+    });
+
+    /**
+     * Register hook on wire --conditionChangedDebounced to
+     * update the condition
+     */
+    this._FBPAddWireHook("--conditionChanged",(e)=>{
+      this.breakpoint.condition = e.composedPath()[0].value;
+      this._notifyChanges()
+    });
+
   }
 
   /**
@@ -59,13 +84,28 @@ class BreakpointListItem extends FBP(LitElement) {
       :host([hidden]) {
         display: none;
       }
+
+      *[hidden] {
+        display: none;
+      }
+      .condition{
+        padding-left: 42px;
+        padding-bottom: 3px;
+        box-sizing: border-box;
+      }
+      .condition input{
+        width: 30%;
+      }
     `
   }
 
   inject(d) {
+    this.breakpoint = d;
     this.path = d.path
     this.wire = d.wire
     this.kind = d.kind
+    this.enabled = d.enabled
+    this.condition = d.condition
 
   }
 
@@ -77,17 +117,32 @@ class BreakpointListItem extends FBP(LitElement) {
   render() {
     // language=HTML
     return html`
-      🗑
-      <input type="checkbox" checked>
-      <select name="" id="">
-        <option value="BREAKPOINT">BREAKPOINT</option>
-        <option value="TRACE">TRACE</option>
-        <option value="CONDITIONAL">CONDITIONAL</option>
-
+      <span @-click="^^delete-request(index)">🗑</span>
+      <input type="checkbox" ?checked="${this.enabled}" @-change="--enabledChanged(*)">
+      <select name="" id="kind" @-change="--kindChanged(*)">
+        <option value="CONDITIONAL" ?selected="${this.kind === 'CONDITIONAL'}">CONDITIONAL</option>
+        <option value="TRACE" ?selected="${this.kind === 'TRACE'}">TRACE</option>
+        <option value="BREAKPOINT" ?selected="${this.kind === 'BREAKPOINT'}">BREAKPOINT</option>
       </select>
-    <span @-click="^^component-requested(path)">${this.path} <small>${this.wire}</small> </span>
+
+      <span @-click="^^component-requested(path)">${this.path} <small>${this.wire}</small> </span>
+      <div class="condition" ?hidden="${! (this.kind === 'CONDITIONAL')}">
+        <input type="text" @-change="--conditionChanged(*)" value="${this.condition}">
+        <small>"this" contains the host component, "data" contains the wire data.</small>
+      </div>
 
     `;
+  }
+
+  _notifyChanges() {
+    /**
+     * @event breakpoint-updated
+     * Fired when a breakpoint gets updated (disable, enable,...
+     * detail payload:
+     */
+    const customEvent = new Event('breakpoint-updated', {composed:true, bubbles: true});
+    customEvent.detail = this.breakpoint ;
+    this.dispatchEvent(customEvent)
   }
 }
 

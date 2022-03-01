@@ -77,6 +77,13 @@ class RemoteMessage extends FBP(LitElement) {
     this.currentComponent = conponent
   }
 
+  notifyBpChanges(){
+    window.opener.postMessage({
+      type: 'BREAKPOINTS',
+      breakpoints: this._breakpoints
+    }, '*');
+  }
+
   addBreakpoint(data) {
     if (window.opener) {
 

@@ -20,14 +20,14 @@ import './breakpoint-list-item.js';
 class BreakpointList extends FBP(LitElement) {
 
 
-
   /**
-  * setList set breakpoints
-  * @public
-  * @param breakpoints
-  */
+   * setList set breakpoints
+   * @public
+   * @param breakpoints
+   */
   setList(breakpoints) {
-      this._FBPTriggerWire('|--list', breakpoints);
+    this.breakpoints = breakpoints;
+    this._FBPTriggerWire('|--list', breakpoints);
   }
 
 
@@ -37,6 +37,18 @@ class BreakpointList extends FBP(LitElement) {
   _FBPReady() {
     super._FBPReady();
     // this._FBPTraceWires()
+    /**
+     * Register hook on wire --deleteRequested to
+     * delete breakpoints
+     */
+    this._FBPAddWireHook("--deleteRequested", (index) => {
+       this.breakpoints.splice(index, 1);
+      this._FBPTriggerWire('|--list', this.breakpoints);
+
+      const customEvent = new Event('breakpoint-deleted', {composed:true, bubbles: true});
+      customEvent.detail = this.breakpoints ;
+      this.dispatchEvent(customEvent)
+    });
   }
 
   /**
@@ -47,23 +59,23 @@ class BreakpointList extends FBP(LitElement) {
   static get styles() {
     // language=CSS
     return css`
-        :host {
-            display: block;
-        }
+      :host {
+        display: block;
+      }
 
-        :host([hidden]) {
-            display: none;
-        }
-        ul
-        {
-          list-style: none;
-          padding: 0;
-          margin: 0;
-        }
+      :host([hidden]) {
+        display: none;
+      }
 
-        span{
-          cursor: pointer;
-        }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      span {
+        cursor: pointer;
+      }
     `
   }
 
@@ -76,11 +88,13 @@ class BreakpointList extends FBP(LitElement) {
   render() {
     // language=HTML
     return html`
-      <small>Breakpoints ⏸</small>
-      <ul>
+      <small>Breakpoints</small>
+      <ul @-delete-request="--deleteRequested">
         <flow-repeat ƒ-inject-items="|--list">
           <template>
-            <li><breakpoint-list-item ƒ-inject="--init"></breakpoint-list-item> </li>
+            <li>
+              <breakpoint-list-item set-index="--index" ƒ-inject="--init"></breakpoint-list-item>
+            </li>
           </template>
         </flow-repeat>
       </ul>
