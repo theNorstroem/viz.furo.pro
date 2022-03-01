@@ -80,14 +80,11 @@ class FuroTooltip extends FBP(LitElement) {
    */
   static get styles() {
     // language=CSS
-    return (
-
-      css`
-        :host {
-          display: none;
-        }
-      `
-    );
+    return css`
+      :host {
+        display: none;
+      }
+    `;
   }
 }
 

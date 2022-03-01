@@ -1,5 +1,5 @@
-import {LitElement, html, css} from 'lit';
-import {FBP} from "@furo/fbp";
+import { LitElement, html, css } from 'lit';
+import { FBP } from '@furo/fbp';
 
 /**
  * `breakpoint-list-item`
@@ -19,8 +19,6 @@ import {FBP} from "@furo/fbp";
  * @appliesMixin FBP
  */
 class BreakpointListItem extends FBP(LitElement) {
-
-
   /**
    * @private
    * @return {Object}
@@ -30,7 +28,7 @@ class BreakpointListItem extends FBP(LitElement) {
       /**
        * Description
        */
-      myBool: {type: Boolean}
+      myBool: { type: Boolean },
     };
   }
 
@@ -44,27 +42,26 @@ class BreakpointListItem extends FBP(LitElement) {
      * Register hook on wire --kindChanged to
      * handle kind changes
      */
-    this._FBPAddWireHook("--kindChanged", (e) => {
-       this.breakpoint.kind =  e.composedPath()[0].value;
+    this._FBPAddWireHook('--kindChanged', e => {
+      this.breakpoint.kind = e.composedPath()[0].value;
       this.kind = this.breakpoint.kind;
       this.requestUpdate();
-       this._notifyChanges()
+      this._notifyChanges();
     });
 
-    this._FBPAddWireHook("--enabledChanged", (e) => {
+    this._FBPAddWireHook('--enabledChanged', e => {
       this.breakpoint.enabled = e.composedPath()[0].checked;
-      this._notifyChanges()
+      this._notifyChanges();
     });
 
     /**
      * Register hook on wire --conditionChangedDebounced to
      * update the condition
      */
-    this._FBPAddWireHook("--conditionChanged",(e)=>{
+    this._FBPAddWireHook('--conditionChanged', e => {
       this.breakpoint.condition = e.composedPath()[0].value;
-      this._notifyChanges()
+      this._notifyChanges();
     });
-
   }
 
   /**
@@ -88,25 +85,24 @@ class BreakpointListItem extends FBP(LitElement) {
       *[hidden] {
         display: none;
       }
-      .condition{
+      .condition {
         padding-left: 42px;
         padding-bottom: 3px;
         box-sizing: border-box;
       }
-      .condition input{
+      .condition input {
         width: 30%;
       }
-    `
+    `;
   }
 
   inject(d) {
     this.breakpoint = d;
-    this.path = d.path
-    this.wire = d.wire
-    this.kind = d.kind
-    this.enabled = d.enabled
-    this.condition = d.condition
-
+    this.path = d.path;
+    this.wire = d.wire;
+    this.kind = d.kind;
+    this.enabled = d.enabled;
+    this.condition = d.condition;
   }
 
   /**
@@ -118,7 +114,7 @@ class BreakpointListItem extends FBP(LitElement) {
     // language=HTML
     return html`
       <span @-click="^^delete-request(index)">🗑</span>
-      <input type="checkbox" ?checked="${this.enabled}" @-change="--enabledChanged(*)">
+      <input type="checkbox" ?checked="${this.enabled}" @-change="--enabledChanged(*)" />
       <select name="" id="kind" @-change="--kindChanged(*)">
         <option value="CONDITIONAL" ?selected="${this.kind === 'CONDITIONAL'}">CONDITIONAL</option>
         <option value="TRACE" ?selected="${this.kind === 'TRACE'}">TRACE</option>
@@ -126,11 +122,10 @@ class BreakpointListItem extends FBP(LitElement) {
       </select>
 
       <span @-click="^^component-requested(path)">${this.path} <small>${this.wire}</small> </span>
-      <div class="condition" ?hidden="${! (this.kind === 'CONDITIONAL')}">
-        <input type="text" @-change="--conditionChanged(*)" value="${this.condition}">
+      <div class="condition" ?hidden="${!(this.kind === 'CONDITIONAL')}">
+        <input type="text" @-change="--conditionChanged(*)" .value="${this.condition}" />
         <small>"this" contains the host component, "data" contains the wire data.</small>
       </div>
-
     `;
   }
 
@@ -140,9 +135,9 @@ class BreakpointListItem extends FBP(LitElement) {
      * Fired when a breakpoint gets updated (disable, enable,...
      * detail payload:
      */
-    const customEvent = new Event('breakpoint-updated', {composed:true, bubbles: true});
-    customEvent.detail = this.breakpoint ;
-    this.dispatchEvent(customEvent)
+    const customEvent = new Event('breakpoint-updated', { composed: true, bubbles: true });
+    customEvent.detail = this.breakpoint;
+    this.dispatchEvent(customEvent);
   }
 }
 

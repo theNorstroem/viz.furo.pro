@@ -1,5 +1,5 @@
-import {LitElement, html, css} from 'lit';
-import {FBP} from "@furo/fbp";
+import { LitElement, html, css } from 'lit';
+import { FBP } from '@furo/fbp';
 import './breakpoint-list-item.js';
 
 /**
@@ -18,8 +18,6 @@ import './breakpoint-list-item.js';
  * @appliesMixin FBP
  */
 class BreakpointList extends FBP(LitElement) {
-
-
   /**
    * setList set breakpoints
    * @public
@@ -29,7 +27,6 @@ class BreakpointList extends FBP(LitElement) {
     this.breakpoints = breakpoints;
     this._FBPTriggerWire('|--list', breakpoints);
   }
-
 
   /**
    * flow is ready lifecycle method
@@ -41,13 +38,13 @@ class BreakpointList extends FBP(LitElement) {
      * Register hook on wire --deleteRequested to
      * delete breakpoints
      */
-    this._FBPAddWireHook("--deleteRequested", (index) => {
-       this.breakpoints.splice(index, 1);
+    this._FBPAddWireHook('--deleteRequested', index => {
+      this.breakpoints.splice(index, 1);
       this._FBPTriggerWire('|--list', this.breakpoints);
 
-      const customEvent = new Event('breakpoint-deleted', {composed:true, bubbles: true});
-      customEvent.detail = this.breakpoints ;
-      this.dispatchEvent(customEvent)
+      const customEvent = new Event('breakpoint-deleted', { composed: true, bubbles: true });
+      customEvent.detail = this.breakpoints;
+      this.dispatchEvent(customEvent);
     });
   }
 
@@ -76,9 +73,8 @@ class BreakpointList extends FBP(LitElement) {
       span {
         cursor: pointer;
       }
-    `
+    `;
   }
-
 
   /**
    * @private

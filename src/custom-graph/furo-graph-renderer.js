@@ -1,6 +1,6 @@
-import {LitElement, css} from 'lit';
-import {FBP} from '@furo/fbp';
-import {SVG} from '@svgdotjs/svg.js';
+import { LitElement, css } from 'lit';
+import { FBP } from '@furo/fbp';
+import { SVG } from '@svgdotjs/svg.js';
 import '@svgdotjs/svg.panzoom.js/dist/svg.panzoom.esm.js';
 
 /**
@@ -12,13 +12,12 @@ import '@svgdotjs/svg.panzoom.js/dist/svg.panzoom.esm.js';
  * @appliesMixin FBP
  */
 class FuroGraphRenderer extends FBP(LitElement) {
-
   constructor() {
     super();
     // collected wires
     this._wires = {};
     // enabled breakpoints (list of wire names)
-    this._activeBreakpoints = []
+    this._activeBreakpoints = [];
   }
 
   draw(graph) {
@@ -33,7 +32,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
     }
     const canvas = SVG()
       .addTo(this.shadowRoot)
-      .panZoom({zoomMin: 0.1, zoomMax: 10, zoomFactor: 0.115});
+      .panZoom({ zoomMin: 0.1, zoomMax: 10, zoomFactor: 0.115 });
 
     canvas.viewbox(0, 0, graphWidth, graphHeight);
     this.canvas = canvas;
@@ -49,7 +48,6 @@ class FuroGraphRenderer extends FBP(LitElement) {
           .fill('none');
         box.radius(10);
         box.addClass(node.type);
-
 
         // set tooltip if exist
         if (node.node.description !== '') {
@@ -81,7 +79,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
            * Fired when a component was clicked
            * detail payload: the complete node
            */
-          const customEvent = new Event('component-dblclick', {composed: true, bubbles: true});
+          const customEvent = new Event('component-dblclick', { composed: true, bubbles: true });
           customEvent.detail = node;
           this.dispatchEvent(customEvent);
         });
@@ -106,31 +104,34 @@ class FuroGraphRenderer extends FBP(LitElement) {
           this._wires[edge.wirename] = [line];
         }
 
-
         line.click(() => {
-          if (line.hasClass("breakpoint")) {
+          if (line.hasClass('breakpoint')) {
             /**
              * @event add-breakpoint
              * Fired when a breakpoint must be added
              */
-            const customEvent = new Event('remove-breakpoint-requested', {composed: true, bubbles: true});
-            customEvent.detail = {line, edge};
-            this.dispatchEvent(customEvent)
-
+            const customEvent = new Event('remove-breakpoint-requested', {
+              composed: true,
+              bubbles: true,
+            });
+            customEvent.detail = { line, edge };
+            this.dispatchEvent(customEvent);
           } else {
             /**
              * @event add-breakpoint
              * Fired when a breakpoint must be added
              */
-            const customEvent = new Event('add-breakpoint-requested', {composed: true, bubbles: true});
-            customEvent.detail = {line, edge};
-            this.dispatchEvent(customEvent)
+            const customEvent = new Event('add-breakpoint-requested', {
+              composed: true,
+              bubbles: true,
+            });
+            customEvent.detail = { line, edge };
+            this.dispatchEvent(customEvent);
           }
         });
 
         line.mouseover(() => {
           if (!toRegistred) {
-
             toRegistred = true;
             timout = setTimeout(() => {
               const elem = {
@@ -290,8 +291,8 @@ class FuroGraphRenderer extends FBP(LitElement) {
           .move(node.x - node.width / 2, node.y - node.height / 2)
           .fill('red');
 
-        if (node.wirename.startsWith("|--")) {
-          circle.fill('green')
+        if (node.wirename.startsWith('|--')) {
+          circle.fill('green');
         }
 
         // send tooltip event
@@ -312,13 +313,12 @@ class FuroGraphRenderer extends FBP(LitElement) {
       if (node.type === 'nosource') {
         // TriggerWire
 
-
         const circle = canvas
           .circle(node.width, node.height)
           .move(node.x - node.width / 2, node.y - node.height / 2)
           .fill('orange');
-        if (node.wirename.startsWith("|--")) {
-          circle.fill('green')
+        if (node.wirename.startsWith('|--')) {
+          circle.fill('green');
         }
         // send tooltip event
         circle.mouseover(() => {
@@ -431,7 +431,7 @@ class FuroGraphRenderer extends FBP(LitElement) {
         }
         // send tooltip event
         box.mouseover(() => {
-          const elem = {duration: 5000, cr: box.node.getBoundingClientRect(), label: node.label};
+          const elem = { duration: 5000, cr: box.node.getBoundingClientRect(), label: node.label };
           const customEvent = new Event('show-tooltip-requested', {
             composed: true,
             bubbles: true,
@@ -448,29 +448,23 @@ class FuroGraphRenderer extends FBP(LitElement) {
   updateBreakpoints(bp) {
     this._activeBreakpoints = bp;
     this._checkBreakPoints();
-
   }
 
   _checkBreakPoints() {
-
     Object.keys(this._wires).forEach(wire => {
       this._wires[wire].forEach(line => {
-        line.removeClass("breakpoint")
-      })
-    })
-
+        line.removeClass('breakpoint');
+      });
+    });
 
     this._activeBreakpoints.forEach(bp => {
       if (this._wires[bp.wire]) {
         this._wires[bp.wire].forEach(line => {
-          line.addClass("breakpoint")
-        })
+          line.addClass('breakpoint');
+        });
       }
-    })
-
-
+    });
   }
-
 
   /**
    * flow is ready lifecycle method
@@ -487,122 +481,116 @@ class FuroGraphRenderer extends FBP(LitElement) {
    */
   static get styles() {
     // language=CSS
-    return (
-      css`
-        :host {
-          display: block;
-          height: 100%;
-          width: 100%;
-          overflow: hidden;
-        }
+    return css`
+      :host {
+        display: block;
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
 
-        :host([hidden]) {
-          display: none;
-        }
+      :host([hidden]) {
+        display: none;
+      }
 
-        svg {
-          width: 100%;
-          height: 100%;
-        }
+      svg {
+        width: 100%;
+        height: 100%;
+      }
 
-        .component {
-          fill: #f6f6f6;
-          stroke: #67686a;
-          stroke-width: 2;
-          cursor: pointer;
-        }
+      .component {
+        fill: #f6f6f6;
+        stroke: #67686a;
+        stroke-width: 2;
+        cursor: pointer;
+      }
 
-        .boxlabelbg {
-          fill: white;
-          stroke: #67686a;
-          stroke-width: 2;
-        }
+      .boxlabelbg {
+        fill: white;
+        stroke: #67686a;
+        stroke-width: 2;
+      }
 
-        .component.withdescription {
-          stroke-dasharray: 20 4;
-        }
+      .component.withdescription {
+        stroke-dasharray: 20 4;
+      }
 
-        .attribute {
-          fill: white;
-          stroke: #ffb65b;
-          stroke-width: 2;
-        }
+      .attribute {
+        fill: white;
+        stroke: #ffb65b;
+        stroke-width: 2;
+      }
 
-        .attribute.method {
-          stroke: #4caf50;
-        }
+      .attribute.method {
+        stroke: #4caf50;
+      }
 
-        .methodindicator {
-          stroke: #4caf50;
-          fill: #4caf50;
-        }
+      .methodindicator {
+        stroke: #4caf50;
+        fill: #4caf50;
+      }
 
-        .eventindicator {
-          stroke: #02a8f4;
-          fill: #02a8f4;
-        }
+      .eventindicator {
+        stroke: #02a8f4;
+        fill: #02a8f4;
+      }
 
-        .attribute.event {
-          stroke: #02a8f4;
-        }
+      .attribute.event {
+        stroke: #02a8f4;
+      }
 
-        .attribute.flag {
-          stroke: #686868;
-        }
+      .attribute.flag {
+        stroke: #686868;
+      }
 
-        .flagindicator {
-          stroke: #686868;
-          fill: #686868;
-        }
+      .flagindicator {
+        stroke: #686868;
+        fill: #686868;
+      }
 
-        .park {
-          stroke: #686868;
-          fill: none;
-          stroke-width: 3;
-        }
+      .park {
+        stroke: #686868;
+        fill: none;
+        stroke-width: 3;
+      }
 
-        .bubbling,
-        .hostevent,
-        .nonbubbling {
-          stroke: #fa4600;
-          fill: none;
-          stroke-width: 3;
-        }
+      .bubbling,
+      .hostevent,
+      .nonbubbling {
+        stroke: #fa4600;
+        fill: none;
+        stroke-width: 3;
+      }
 
-        .line.event {
-          stroke: #fa4600;
-          fill: none;
-          stroke-width: 4;
-        }
+      .line.event {
+        stroke: #fa4600;
+        fill: none;
+        stroke-width: 4;
+      }
 
-        .line {
-          stroke: #02a8f4;
-          fill: none;
-          stroke-width: 5;
-        }
+      .line {
+        stroke: #02a8f4;
+        fill: none;
+        stroke-width: 5;
+      }
 
-        .line.park {
-          stroke: #070707;
-          fill: none;
-          stroke-width: 4;
-        }
+      .line.park {
+        stroke: #070707;
+        fill: none;
+        stroke-width: 4;
+      }
 
-        .line:hover {
-          stroke: #f4c633;
-          cursor: copy;
-        }
+      .line:hover {
+        stroke: #f4c633;
+        cursor: copy;
+      }
 
+      .line.breakpoint {
+        stroke: #c6191e;
 
-        .line.breakpoint {
-          stroke: #c6191e;
-
-          cursor: no-drop;
-        }
-
-
-
-      `
-    );
+        cursor: no-drop;
+      }
+    `;
   }
 }
 

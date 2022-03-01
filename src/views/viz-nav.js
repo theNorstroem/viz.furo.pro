@@ -3,7 +3,6 @@ import { LitElement, html, css } from 'lit';
 import { FBP } from '@furo/fbp';
 import '@furo/layout';
 
-
 /**
  * `viz-nav`
  * main navigation
@@ -19,32 +18,30 @@ class VizNav extends FBP(LitElement) {
    */
   static get styles() {
     // language=CSS
-    return (
-      css`
-        :host {
-          display: block;
-          --spacing-xs: 2px;
-        }
+    return css`
+      :host {
+        display: block;
+        --spacing-xs: 2px;
+      }
 
-        :host([hidden]) {
-          display: none;
-        }
+      :host([hidden]) {
+        display: none;
+      }
 
-        .nav {
-          min-width: 30px;
-          padding: 0;
-        }
-        .title{
-          background: white;
-          box-sizing: border-box;
-        }
-      `
-    );
+      .nav {
+        min-width: 30px;
+        padding: 0;
+      }
+      .title {
+        background: white;
+        box-sizing: border-box;
+      }
+    `;
   }
 
-  setTitle(title){
-   this.componentTitle = title;
-   this.requestUpdate();
+  setTitle(title) {
+    this.componentTitle = title;
+    this.requestUpdate();
   }
 
   /**
@@ -57,11 +54,11 @@ class VizNav extends FBP(LitElement) {
     return html`
       <furo-horizontal-flex space>
         <!-- This is the button, you see on the top left corner of the app. Everything starts with pressing this button (as long you have some content in your clipboard) -->
-        <button class="nav"  @-click="-^escape">⇦</button>
-        <div class="title"> ${this.componentTitle}</div>
+        <button class="nav" @-click="-^escape">⇦</button>
+        <div class="title">${this.componentTitle}</div>
         <furo-empty-spacer></furo-empty-spacer>
         <!-- The help button ot the top right side just links to /man. Thats all. -->
-        <button autofocus     @-click="-^clipboard-requested">ctrl-v</button>
+        <button autofocus @-click="-^clipboard-requested">ctrl-v</button>
         <a href="/man">
           <button outline>help</button>
         </a>

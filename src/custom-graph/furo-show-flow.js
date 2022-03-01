@@ -252,7 +252,7 @@ class FuroShowFlow extends FBP(LitElement) {
               this._collectedWires.methods.push(attr);
               // eslint-disable-next-line no-param-reassign
               attr._type = 'method';
-            }// collect the method wires
+            } // collect the method wires
             if (attr.name.startsWith('set-')) {
               this._collectedWires.methods.push(attr);
               // eslint-disable-next-line no-param-reassign
@@ -272,29 +272,26 @@ class FuroShowFlow extends FBP(LitElement) {
    */
   static get styles() {
     // language=CSS
-    return (
-      css`
-        :host {
-          display: block;
-          height: 100%;
-        }
+    return css`
+      :host {
+        display: block;
+        height: 100%;
+      }
 
-        :host([hidden]) {
-          display: none;
-        }
-      `
-    );
+      :host([hidden]) {
+        display: none;
+      }
+    `;
   }
 
   /**
-  * updateBreakpoints
-  * @public
-  * @param bp
-  */
+   * updateBreakpoints
+   * @public
+   * @param bp
+   */
   updateBreakpoints(bp) {
-      this._FBPTriggerWire('|--updateBreakpoints', bp);
+    this._FBPTriggerWire('|--updateBreakpoints', bp);
   }
-
 
   /**
    * @private
@@ -302,7 +299,12 @@ class FuroShowFlow extends FBP(LitElement) {
    */
   render() {
     // language=HTML
-    return html` <furo-graph-renderer ƒ-update-breakpoints="|--updateBreakpoints" ƒ-draw="--graph"></furo-graph-renderer> `;
+    return html`
+      <furo-graph-renderer
+        ƒ-update-breakpoints="|--updateBreakpoints"
+        ƒ-draw="--graph"
+      ></furo-graph-renderer>
+    `;
   }
 }
 

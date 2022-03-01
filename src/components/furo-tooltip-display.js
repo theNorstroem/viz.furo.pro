@@ -83,37 +83,35 @@ class FuroTooltipDisplay extends FBP(LitElement) {
    */
   static get styles() {
     // language=CSS
-    return (
-      css`
-        :host {
-          position: absolute;
-          display: none;
-          top: 0;
-          left: 0;
-          transition: opacity 300ms;
-          opacity: 0;
-          background-color: #6d6d6d;
-          color: white;
-          height: 24px;
-          padding: 0 8px;
-          border-radius: 4px;
-          font-size: 12px;
-          line-height: 24px;
-          z-index: 10;
-          white-space: nowrap;
-        }
+    return css`
+      :host {
+        position: absolute;
+        display: none;
+        top: 0;
+        left: 0;
+        transition: opacity 300ms;
+        opacity: 0;
+        background-color: #6d6d6d;
+        color: white;
+        height: 24px;
+        padding: 0 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        line-height: 24px;
+        z-index: 10;
+        white-space: nowrap;
+      }
 
-        :host([start]) {
-          display: block;
-          opacity: 0;
-        }
+      :host([start]) {
+        display: block;
+        opacity: 0;
+      }
 
-        :host([show]) {
-          opacity: 1;
-          display: block;
-        }
-      `
-    );
+      :host([show]) {
+        opacity: 1;
+        display: block;
+      }
+    `;
   }
 
   /**
@@ -123,9 +121,7 @@ class FuroTooltipDisplay extends FBP(LitElement) {
    */
   render() {
     // language=HTML
-    return html`
-      ${this.label}
-    `;
+    return html` ${this.label} `;
   }
 }
 

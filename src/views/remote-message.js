@@ -1,5 +1,5 @@
-import {LitElement, css} from 'lit';
-import {FBP} from '@furo/fbp';
+import { LitElement, css } from 'lit';
+import { FBP } from '@furo/fbp';
 
 /**
  * `remote-content`
@@ -11,15 +11,12 @@ import {FBP} from '@furo/fbp';
  * @appliesMixin FBP
  */
 class RemoteMessage extends FBP(LitElement) {
-
   constructor() {
     super();
 
     // store for the breakpoints
     this._breakpoints = [];
-
   }
-
 
   _FBPReady() {
     super._FBPReady();
@@ -32,39 +29,39 @@ class RemoteMessage extends FBP(LitElement) {
          * Fired when remote content was received
          * detail payload: html
          */
-        const customEvent = new Event('content', {composed: true, bubbles: true});
+        const customEvent = new Event('content', { composed: true, bubbles: true });
         customEvent.detail = event.data;
         this.dispatchEvent(customEvent);
-        this.path = event.data.path
+        this.path = event.data.path;
 
         setTimeout(() => {
-          this._notifyBPChanges()
-        }, 200)
+          this._notifyBPChanges();
+        }, 200);
       }
 
       // reconnecting
-      if (event.data === "PARENT_REFRESHING") { // STEP 1
-        console.log("PARENT_REFRESHING")
+      if (event.data === 'PARENT_REFRESHING') {
+        // STEP 1
+        // eslint-disable-next-line no-console
+        console.log('PARENT_REFRESHING');
         setTimeout(() => {
-          window.opener.postMessage( // STEP 3
-            {type: "PARENT_REFRESHED", url: window.location.href},
-            '*'
+          window.opener.postMessage(
+            // STEP 3
+            { type: 'PARENT_REFRESHED', url: window.location.href },
+            '*',
           );
         }, 1000);
       }
 
       // receive breakpoints
-      if (event.data && event.data.type === "BREAKPOINTS") {
-        this._breakpoints = event.data.breakpoints
+      if (event.data && event.data.type === 'BREAKPOINTS') {
+        this._breakpoints = event.data.breakpoints;
       }
-
-
-
     });
 
     this.updateComplete.then(() => {
       if (window.opener) {
-        window.opener.postMessage({type: 'ANALYZER_READY'}, '*');
+        window.opener.postMessage({ type: 'ANALYZER_READY' }, '*');
       }
     });
   }
@@ -74,75 +71,93 @@ class RemoteMessage extends FBP(LitElement) {
    * @param conponent
    */
   setCurrentComponent(conponent) {
-    this.currentComponent = conponent
+    this.currentComponent = conponent;
   }
 
-  notifyBpChanges(){
-    window.opener.postMessage({
-      type: 'BREAKPOINTS',
-      breakpoints: this._breakpoints
-    }, '*');
+  notifyBpChanges() {
+    window.opener.postMessage(
+      {
+        type: 'BREAKPOINTS',
+        breakpoints: this._breakpoints,
+      },
+      '*',
+    );
   }
 
   addBreakpoint(data) {
     if (window.opener) {
+      this._breakpoints.push({
+        path: this.path,
+        wire: data.edge.wirename,
+        kind: 'BREAKPOINT',
+        enabled: true,
+      });
 
+      window.opener.postMessage(
+        {
+          type: 'BREAKPOINTS',
+          breakpoints: this._breakpoints,
+        },
+        '*',
+      );
 
-      this._breakpoints.push({path: this.path, wire: data.edge.wirename, kind: "BREAKPOINT", enabled: true});
-
-      window.opener.postMessage({
-        type: 'BREAKPOINTS',
-        breakpoints: this._breakpoints
-      }, '*');
-
-      this._notifyBPChanges()
+      this._notifyBPChanges();
     }
   }
 
   removeBreakpoint(data) {
-
     if (window.opener) {
-      this._breakpoints = this._breakpoints.filter(bp => !(bp.path === this.path && bp.wire === data.edge.wirename));
-      window.opener.postMessage({
-        type: 'BREAKPOINTS',
-        breakpoints: this._breakpoints
-      }, '*');
+      this._breakpoints = this._breakpoints.filter(
+        bp => !(bp.path === this.path && bp.wire === data.edge.wirename),
+      );
+      window.opener.postMessage(
+        {
+          type: 'BREAKPOINTS',
+          breakpoints: this._breakpoints,
+        },
+        '*',
+      );
 
-      this._notifyBPChanges()
+      this._notifyBPChanges();
     }
   }
 
   // eslint-disable-next-line class-methods-use-this
   requestComponent(node) {
     if (node.label.includes('-') && window.opener) {
-      let {path} = this
+      let { path } = this;
 
-      if (this.path !== "body") {
-        path = `${this.path}::shadow`
+      if (this.path !== 'body') {
+        path = `${this.path}::shadow`;
       }
-      window.opener.postMessage({
-        type: 'COMPONENT_REQUEST', path: `${path} > ${node.label.toLowerCase()}`
-
-      }, '*');
+      window.opener.postMessage(
+        {
+          type: 'COMPONENT_REQUEST',
+          path: `${path} > ${node.label.toLowerCase()}`,
+        },
+        '*',
+      );
     }
   }
 
   // eslint-disable-next-line class-methods-use-this
   requestParentComponent() {
-    window.opener.postMessage({
-      type: 'PARENT_COMPONENT_REQUEST', path: `${this.path}`
-    }, '*');
-
+    window.opener.postMessage(
+      {
+        type: 'PARENT_COMPONENT_REQUEST',
+        path: `${this.path}`,
+      },
+      '*',
+    );
   }
 
   // eslint-disable-next-line class-methods-use-this
   requestComponentByPath(path) {
     if (window.opener) {
-      window.opener.postMessage({type: 'COMPONENT_REQUEST', path}, '*');
+      window.opener.postMessage({ type: 'COMPONENT_REQUEST', path }, '*');
       setTimeout(() => {
-        this._notifyBPChanges()
-      }, 200)
-
+        this._notifyBPChanges();
+      }, 200);
     }
   }
 
@@ -153,13 +168,11 @@ class RemoteMessage extends FBP(LitElement) {
    */
   static get styles() {
     // language=CSS
-    return (
-      css`
-        :host {
-          display: none;
-        }
-      `
-    );
+    return css`
+      :host {
+        display: none;
+      }
+    `;
   }
 
   _notifyBPChanges() {
@@ -169,9 +182,9 @@ class RemoteMessage extends FBP(LitElement) {
      * detail payload:
      */
     if (this._breakpoints) {
-      const bp = new Event('breakpoints-changed', {composed: true, bubbles: true});
+      const bp = new Event('breakpoints-changed', { composed: true, bubbles: true });
       bp.detail = this._breakpoints;
-      this.dispatchEvent(bp)
+      this.dispatchEvent(bp);
     }
 
     /**
@@ -180,12 +193,10 @@ class RemoteMessage extends FBP(LitElement) {
      * detail payload:
      */
 
-    const customEvent = new Event('cc-breakpoints-changed', {composed: true, bubbles: true});
-    customEvent.detail = this._breakpoints.filter((bp) => bp.path === this.path);
+    const customEvent = new Event('cc-breakpoints-changed', { composed: true, bubbles: true });
+    customEvent.detail = this._breakpoints.filter(bp => bp.path === this.path);
 
-    this.dispatchEvent(customEvent)
-
-
+    this.dispatchEvent(customEvent);
   }
 }
 

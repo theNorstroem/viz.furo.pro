@@ -45,7 +45,6 @@ class AppShell extends FBP(LitElement) {
         @-navigate-back-clicked="--navBack"
       ></main-stage>
       <furo-tooltip-display></furo-tooltip-display>
-
     `;
   }
 }

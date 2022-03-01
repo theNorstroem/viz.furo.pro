@@ -26,34 +26,32 @@ class ManPage extends FBP(LitElement) {
    */
   static get styles() {
     // language=CSS
-    return (
-      css`
-        :host {
-          display: block;
-          background: var(--surface);
-          padding: 16px 140px 24px 24px;
+    return css`
+      :host {
+        display: block;
+        background: var(--surface);
+        padding: 16px 140px 24px 24px;
 
-          height: 100%;
-          overflow: auto;
-          box-sizing: border-box;
-        }
+        height: 100%;
+        overflow: auto;
+        box-sizing: border-box;
+      }
 
-        :host([hidden]) {
-          display: none;
-        }
+      :host([hidden]) {
+        display: none;
+      }
 
-        a.close {
-          position: absolute;
-          right: 24px;
-          top: 16px;
-          outline: none;
-        }
+      a.close {
+        position: absolute;
+        right: 24px;
+        top: 16px;
+        outline: none;
+      }
 
-        h1 {
-          margin-top: 0;
-        }
-      `
-    );
+      h1 {
+        margin-top: 0;
+      }
+    `;
   }
 
   /**
@@ -88,9 +86,7 @@ class ManPage extends FBP(LitElement) {
       <p>
         If you are familiar with fbp, you should not have any problem to read the graph. Otherwise
         we recommend to read
-        <a target="_blank" rel="noreferrer" href="https://fbp.furo.pro/"
-          >the guide</a
-        >
+        <a target="_blank" rel="noreferrer" href="https://fbp.furo.pro/">the guide</a>
         to learn more about
       </p>
       <p>The <strong>boxes</strong> represent the used components.</p>

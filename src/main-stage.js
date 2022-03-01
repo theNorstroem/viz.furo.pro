@@ -7,7 +7,6 @@ import '@furo/layout/src/furo-vertical-flex';
 import '@furo/route/src/furo-location';
 import '@furo/route/src/furo-pages';
 
-
 /**
  * `main-stage`
  *
@@ -25,9 +24,6 @@ class MainStage extends FBP(LitElement) {
    * @return {CSSResult}
    */
   static get styles() {
-
-
-
     // language=CSS
     return [
       css`
@@ -47,7 +43,6 @@ class MainStage extends FBP(LitElement) {
           height: 100%;
         }
       `,
-
     ];
   }
 

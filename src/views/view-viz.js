@@ -2,7 +2,6 @@ import { LitElement, html, css } from 'lit';
 import { FBP } from '@furo/fbp';
 import '@furo/fbp/src/flow-repeat';
 
-
 import '@furo/util/src/furo-get-clipboard';
 import '@furo/util/src/furo-key-filter';
 import '@furo/util/src/furo-keydown';
@@ -26,16 +25,18 @@ class ViewViz extends FBP(LitElement) {
   _FBPReady() {
     super._FBPReady();
     // describe view-viz itself
-    this._FBPTriggerWire('--remoteContent', {data:this.shadowRoot.innerHTML, component:"view-viz"});
+    this._FBPTriggerWire('--remoteContent', {
+      data: this.shadowRoot.innerHTML,
+      component: 'view-viz',
+    });
 
     /**
      * Register hook on wire |--clipboardContent to
      * pack it in the correct structure
      */
-    this._FBPAddWireHook("|--clipboardContent",(e)=>{
-      this._FBPTriggerWire('|--wrappedClipboardContent', {data:e, component:"from clipboard"});
+    this._FBPAddWireHook('|--clipboardContent', e => {
+      this._FBPTriggerWire('|--wrappedClipboardContent', { data: e, component: 'from clipboard' });
     });
-
   }
 
   /**
@@ -45,34 +46,31 @@ class ViewViz extends FBP(LitElement) {
    */
   static get styles() {
     // language=CSS
-    return (
-      css`
-        :host {
-          display: block;
-        }
+    return css`
+      :host {
+        display: block;
+      }
 
-        :host([hidden]) {
-          display: none;
-        }
+      :host([hidden]) {
+        display: none;
+      }
 
-        furo-show-flow {
-          height: 100vh;
+      furo-show-flow {
+        height: 100vh;
+      }
 
-        }
-
-        viz-nav {
-          position: absolute;
-          left: 24px;
-          top: 16px;
-          right: 24px;
-        }
-        breakpoint-list{
-          position: absolute;
-          left: 24px;
-          bottom: 16px;
-        }
-      `
-    );
+      viz-nav {
+        position: absolute;
+        left: 24px;
+        top: 16px;
+        right: 24px;
+      }
+      breakpoint-list {
+        position: absolute;
+        left: 24px;
+        bottom: 16px;
+      }
+    `;
   }
 
   /**
@@ -94,8 +92,8 @@ class ViewViz extends FBP(LitElement) {
         ƒ-set-list="--breakPoints"
         @-breakpoint-updated="--bpChanges"
         @-breakpoint-deleted="--bpChanges"
-        @-component-requested="--componentPath"></breakpoint-list>
-
+        @-component-requested="--componentPath"
+      ></breakpoint-list>
 
       <!-- This component shows the graphed flow of the injected content. -->
       <furo-show-flow
@@ -112,8 +110,6 @@ class ViewViz extends FBP(LitElement) {
         ƒ-trigger="--clipboardContentRequested"
         @-content="|--clipboardContent"
       ></furo-get-clipboard>
-
-
 
       <!-- receive content from opener -->
       <remote-message
