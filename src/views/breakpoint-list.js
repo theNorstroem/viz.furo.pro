@@ -76,7 +76,7 @@ class BreakpointList extends FBP(LitElement) {
   render() {
     // language=HTML
     return html`
-      <small>Breakpoints</small>
+      <small>Breakpoints ⏸</small>
       <ul>
         <flow-repeat ƒ-inject-items="|--list">
           <template>

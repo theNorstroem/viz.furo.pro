@@ -77,7 +77,8 @@ class BreakpointListItem extends FBP(LitElement) {
   render() {
     // language=HTML
     return html`
-      <input type="checkbox">
+      🗑
+      <input type="checkbox" checked>
       <select name="" id="">
         <option value="BREAKPOINT">BREAKPOINT</option>
         <option value="TRACE">TRACE</option>

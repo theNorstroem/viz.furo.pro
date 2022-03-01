@@ -29,11 +29,6 @@ class RemoteMessage extends FBP(LitElement) {
       condition: "this.getAttribute('name')==='echo-service'",
       enabled: true
     }, {
-      path: "body > app-shell::shadow > main-stage::shadow > furo-pages > view-echo",
-      wire: "|--FBPready",
-      kind: "TRACE",
-      enabled: true
-    }, {
       path: "body > app-shell::shadow > main-stage",
       wire: "--locationChanged",
       kind: "BREAKPOINT",
@@ -76,6 +71,13 @@ class RemoteMessage extends FBP(LitElement) {
         }, 1000);
       }
 
+      // receive breakpoints
+      if (event.data && event.data.type === "BREAKPOINTS") {
+        this._breakpoints = event.data.breakpoints
+      }
+
+
+
     });
 
     this.updateComplete.then(() => {
@@ -96,17 +98,13 @@ class RemoteMessage extends FBP(LitElement) {
   addBreakpoint(data) {
     if (window.opener) {
 
-      /**
-       window.opener.postMessage({
-        type: 'ADD_BREAKPOINT',
-        path: this.path,
-        wire: data.edge.wirename
-      }, '*');
-       **/
-
 
       this._breakpoints.push({path: this.path, wire: data.edge.wirename, kind: "BREAKPOINT", enabled: true});
 
+      window.opener.postMessage({
+        type: 'BREAKPOINTS',
+        breakpoints: this._breakpoints
+      }, '*');
 
       this._notifyBPChanges()
     }
@@ -115,18 +113,11 @@ class RemoteMessage extends FBP(LitElement) {
   removeBreakpoint(data) {
 
     if (window.opener) {
-      /**
+      this._breakpoints = this._breakpoints.filter(bp => !(bp.path === this.path && bp.wire === data.edge.wirename));
       window.opener.postMessage({
-        type: 'REMOVE_BREAKPOINT',
-        path: this.path,
-        wire: data.edge.wirename
+        type: 'BREAKPOINTS',
+        breakpoints: this._breakpoints
       }, '*');
-*/
-
-      this._breakpoints=  this._breakpoints.filter(bp =>{
-        return !(bp.path === this.path && bp.wire === data.edge.wirename)
-      } );
-
 
       this._notifyBPChanges()
     }
@@ -135,8 +126,13 @@ class RemoteMessage extends FBP(LitElement) {
   // eslint-disable-next-line class-methods-use-this
   requestComponent(node) {
     if (node.label.includes('-') && window.opener) {
+      let {path} = this
+
+      if (this.path !== "body") {
+        path = `${this.path}::shadow`
+      }
       window.opener.postMessage({
-        type: 'COMPONENT_REQUEST', path: `${this.path}::shadow > ${node.label.toLowerCase()}`
+        type: 'COMPONENT_REQUEST', path: `${path} > ${node.label.toLowerCase()}`
 
       }, '*');
     }
@@ -197,9 +193,8 @@ class RemoteMessage extends FBP(LitElement) {
 
     const customEvent = new Event('cc-breakpoints-changed', {composed: true, bubbles: true});
     customEvent.detail = this._breakpoints.filter((bp) => bp.path === this.path);
-    if (customEvent.detail.length > 0) {
-      this.dispatchEvent(customEvent)
-    }
+
+    this.dispatchEvent(customEvent)
 
 
   }
