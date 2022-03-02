@@ -1,5 +1,5 @@
-import { LitElement, css } from 'lit';
-import { FBP } from '@furo/fbp';
+import {LitElement, css} from 'lit';
+import {FBP} from '@furo/fbp';
 
 /**
  * `remote-content`
@@ -20,6 +20,7 @@ class RemoteMessage extends FBP(LitElement) {
 
   _FBPReady() {
     super._FBPReady();
+    let parentReconnected = false
 
     window.addEventListener('message', event => {
       // expect {type:"render-request", data: html}
@@ -29,7 +30,7 @@ class RemoteMessage extends FBP(LitElement) {
          * Fired when remote content was received
          * detail payload: html
          */
-        const customEvent = new Event('content', { composed: true, bubbles: true });
+        const customEvent = new Event('content', {composed: true, bubbles: true});
         customEvent.detail = event.data;
         this.dispatchEvent(customEvent);
         this.path = event.data.path;
@@ -44,24 +45,45 @@ class RemoteMessage extends FBP(LitElement) {
         // STEP 1
         // eslint-disable-next-line no-console
         console.log('PARENT_REFRESHING');
-        setTimeout(() => {
-          window.opener.postMessage(
-            // STEP 3
-            { type: 'PARENT_REFRESHED', url: window.location.href },
-            '*',
-          );
-        }, 1000);
+
+        let counter = 0;
+
+        const i = setInterval(() => {
+          if(!parentReconnected){
+            // do your thing
+            window.opener.postMessage(
+              // STEP 3
+              {type: 'PARENT_REFRESHED', url: window.location.href},
+              '*',
+            );
+          }
+
+          counter += 1;
+          if (counter === 100 || parentReconnected) {
+            // set to false for the next refresh cycle
+            parentReconnected = false;
+            clearInterval(i);
+          }
+        }, 64);
+
+
       }
 
       // receive breakpoints
       if (event.data && event.data.type === 'BREAKPOINTS') {
         this._breakpoints = event.data.breakpoints;
       }
+      // receive breakpoints
+      if (event.data === 'PARENT_RECONNECTED') {
+        parentReconnected = true;
+      }
+
+
     });
 
     this.updateComplete.then(() => {
       if (window.opener) {
-        window.opener.postMessage({ type: 'ANALYZER_READY' }, '*');
+        window.opener.postMessage({type: 'ANALYZER_READY'}, '*');
       }
     });
   }
@@ -125,7 +147,7 @@ class RemoteMessage extends FBP(LitElement) {
   // eslint-disable-next-line class-methods-use-this
   requestComponent(node) {
     if (node.label.includes('-') && window.opener) {
-      let { path } = this;
+      let {path} = this;
 
       if (this.path !== 'body') {
         path = `${this.path}::shadow`;
@@ -154,7 +176,7 @@ class RemoteMessage extends FBP(LitElement) {
   // eslint-disable-next-line class-methods-use-this
   requestComponentByPath(path) {
     if (window.opener) {
-      window.opener.postMessage({ type: 'COMPONENT_REQUEST', path }, '*');
+      window.opener.postMessage({type: 'COMPONENT_REQUEST', path}, '*');
       setTimeout(() => {
         this._notifyBPChanges();
       }, 200);
@@ -182,7 +204,7 @@ class RemoteMessage extends FBP(LitElement) {
      * detail payload:
      */
     if (this._breakpoints) {
-      const bp = new Event('breakpoints-changed', { composed: true, bubbles: true });
+      const bp = new Event('breakpoints-changed', {composed: true, bubbles: true});
       bp.detail = this._breakpoints;
       this.dispatchEvent(bp);
     }
@@ -193,7 +215,7 @@ class RemoteMessage extends FBP(LitElement) {
      * detail payload:
      */
 
-    const customEvent = new Event('cc-breakpoints-changed', { composed: true, bubbles: true });
+    const customEvent = new Event('cc-breakpoints-changed', {composed: true, bubbles: true});
     customEvent.detail = this._breakpoints.filter(bp => bp.path === this.path);
 
     this.dispatchEvent(customEvent);

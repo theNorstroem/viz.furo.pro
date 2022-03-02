@@ -124,7 +124,6 @@ class BreakpointListItem extends FBP(LitElement) {
       <span @-click="^^component-requested(path)">${this.path} <small>${this.wire}</small> </span>
       <div class="condition" ?hidden="${!(this.kind === 'CONDITIONAL')}">
         <input type="text" @-change="--conditionChanged(*)" .value="${this.condition}" />
-        <small>"this" contains the host component, "data" contains the wire data.</small>
       </div>
     `;
   }

@@ -24,11 +24,6 @@ class ViewViz extends FBP(LitElement) {
    */
   _FBPReady() {
     super._FBPReady();
-    // describe view-viz itself
-    this._FBPTriggerWire('--remoteContent', {
-      data: this.shadowRoot.innerHTML,
-      component: 'view-viz',
-    });
 
     /**
      * Register hook on wire |--clipboardContent to

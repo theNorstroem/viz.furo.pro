@@ -62,27 +62,30 @@ class ManPage extends FBP(LitElement) {
   render() {
     // language=HTML
     return html`
-      <h1>man viz.furo.pro</h1>
-      <p><strong>v 1.7.1</strong></p>
+      <h1>viz.furo.pro</h1>
+      <p><strong>requires a client with @furo/fbp ^6.3.0</strong></p>
       <p>
-        With viz.furo.pro you can inspect fbp flows. You can paste in the template from your source
-        code or paste live flows from your running apps.
+        With viz.furo.pro you can inspect fbp flows and also set breakpoints.
       </p>
-      <p>When you start the app, you will see the current flow of viz.furo.pro itself.</p>
-      <h3>Getting the template from running apps</h3>
-      <ol>
-        <li>Select the element in the elements tab of your chrome dev toos</li>
-        <li>
-          type in <strong>copy($0.shadowRoot.innerHTML)</strong>
-          in the console.
-        </li>
-        <li>
-          Then paste the received content (already in clipboard) in viz.furo.pro to inspect live
-          apps
-        </li>
-      </ol>
+      <p>Click on a wire to set a breakpoint.</p>
 
-      <h2>Reading the flow graph</h2>
+      <h2>Breakpoint Options</h2>
+      <p>You can switch the behaviour of a set breakpoint as following: </p>
+      <p><strong>BREAKPOINT</strong> will stop in the dev console of your client.</p>
+      <p><strong>TRACE</strong> will log the wire in to  the dev console of your client.</p>
+      <p><strong>CONDITIONAL</strong> will stop in the dev console of your client if the given condition resolves to true.
+       The variable "this" contains the host component and the variable "data" contains the wire data.
+      </p>
+
+      <h2>Mouse controls</h2>
+
+      <p><strong>double click</strong> opens the component.</p>
+      <p><strong>scroll down</strong> zooms the flow in.</p>
+      <p><strong>scroll up</strong> zooms the out.</p>
+      <p><strong>moving the mouse with mousedown</strong> pans the flow.</p>
+
+
+      <h2>How to read the flow graph</h2>
       <p>
         If you are familiar with fbp, you should not have any problem to read the graph. Otherwise
         we recommend to read
@@ -128,20 +131,8 @@ class ManPage extends FBP(LitElement) {
         <strong>this._FBPAddWireHook("--wireName",(e)=>{ ... });</strong>
       </p>
 
-      <h2>Keyboard shortcuts</h2>
-      <p><strong>f</strong> on the buttons toggles the fullscreen mode. Press "esc" to get back.</p>
-      <p><strong>ctrl v</strong> or <strong>cmd v</strong> renders the clipboard content.</p>
-      <p>
-        <strong>enter</strong> on the navigation buttons or arrow-left, arrow-right ◀, ▶ re renders
-        the last pasted content.
-      </p>
-      <p><strong>enter</strong> on the ✘ button or Backspace removes the current view.</p>
-      <p><strong>enter</strong> on the parse button renders the clipboard content.</p>
 
-      <h2>Mouse controls</h2>
-      <p><strong>scroll down</strong> zooms the flow in.</p>
-      <p><strong>scroll up</strong> zooms the out.</p>
-      <p><strong>moving the mouse with mousedown</strong> pans the flow.</p>
+
 
       <h2>Touch controls</h2>
       <p><strong>pinch in</strong> zooms the flow in.</p>
